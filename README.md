@@ -9,7 +9,7 @@
 
 This project implements an autonomous multi-drone system for search and rescue operations using reinforcement learning (RL). The system trains drone swarms to efficiently search areas, detect victims, and optimize rescue routes while maintaining stable flight patterns. The project consists of:
 
-![Multi Drone Training](https://github.com/Prtm2110/SAR-DroneAI/blob/e1a800a7aed0cd0b18775f1ce3a5e279343b5a83/assets/multi.png)
+![Multi Drone Training](Drone-RL-Processing/assets/multi.png)
 
 - A **real-time drone UI** for monitoring and controlling drones
 - **Reinforcement learning** models to optimize drone search efficiency
@@ -24,7 +24,7 @@ This project implements an autonomous multi-drone system for search and rescue o
 - **Real-time UI Dashboard**: Monitor drone behavior and RL training
 - **Reinforcement Learning**: PPO-based training for optimized navigation
 
-![RL Dashboard](https://github.com/Prtm2110/SAR-DroneAI/blob/e1a800a7aed0cd0b18775f1ce3a5e279343b5a83/assets/frontend.png)
+![RL Dashboard](Drone-RL-Processing/assets/frontend.png)
 
 ## System Components
 
@@ -84,7 +84,7 @@ Navigate to `http://localhost:8000/index.html` to view the UI.
 
 ---
 
-![Basic UI](https://github.com/Prtm2110/SAR-DroneAI/blob/main/Drone-RL-Processing/assets/frontend_drone.png)
+![Basic UI](Drone-RL-Processing/assets/frontend_drone.png)
 
 ## Running the RL Simulation
 
