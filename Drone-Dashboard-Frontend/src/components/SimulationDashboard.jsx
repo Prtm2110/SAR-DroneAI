@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Maximize2, Monitor, Camera } from "lucide-react";
 
 const SERVER_WS_URL = "ws://localhost:8765";
-const SIMULATION_URL = "http://127.0.0.1:5500/Autonomous-Search-and-Rescue-Drone/Drone-UI/index.html";
+const SIMULATION_URL = "http://127.0.0.1:5500/SAR-DroneAI/Drone-UI/index.html";
 
-const DEFAULT_IMAGE = "/test_data/thermal/no_human/FLIR_04123_jpeg_jpg.rf.fa8691c9bfaccaa604ff9cbb7f1af48c.jpg";
+const DEFAULT_IMAGE =
+  "/test_data/thermal/no_human/FLIR_04123_jpeg_jpg.rf.fa8691c9bfaccaa604ff9cbb7f1af48c.jpg";
 
 const SimulationDashboard = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -27,7 +28,7 @@ const SimulationDashboard = () => {
       if (data.type === "thermal") {
         setDetectedImage(data.image);
         setIsDetecting(false);
-        
+
         // Clear detection after 4 seconds
         setTimeout(() => {
           setDetectedImage(null);
@@ -55,8 +56,9 @@ const SimulationDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className={`bg-gray-800 rounded-lg border border-gray-700 shadow-xl 
-          ${isFullscreen ? "fixed inset-0 z-50" : ""} 
+        <div
+          className={`bg-gray-800 rounded-lg border border-gray-700 shadow-xl
+          ${isFullscreen ? "fixed inset-0 z-50" : ""}
           transition-all duration-300 hover:border-blue-500`}
         >
           <div className="flex items-center justify-between p-4 border-b border-gray-700 bg-gray-800/50 backdrop-blur">
@@ -98,7 +100,9 @@ const SimulationDashboard = () => {
               <div className="absolute top-2 right-2 z-10">
                 <button
                   className={`px-3 py-1 rounded text-sm ${
-                    isDetecting ? "bg-blue-500 text-white" : "bg-gray-700 text-white hover:bg-blue-500"
+                    isDetecting
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-700 text-white hover:bg-blue-500"
                   }`}
                   onClick={sendDetectionRequest}
                   disabled={isDetecting}

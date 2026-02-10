@@ -2,46 +2,45 @@ import os
 import json
 import torch
 import cv2
-import matplotlib.pyplot as plt
 import torchaudio
 import torchaudio.transforms as transforms
 import torch.nn as nn
-import numpy as np
 import asyncio
 import websockets
 import base64
 import random
 from torchvision import models
 from ultralytics import YOLO
-import simpleaudio as sa
+
 from glob import glob
 
 # Paths to the models
 MODEL_PATHS = {
     "image": "Drone-UI/models/image.pt",
     "thermal": "Drone-UI/models/thermal.pt",
-    "audio": "Drone-UI/models/screaming_detector_gpu.pth"
+    "audio": "Drone-UI/models/screaming_detector_gpu.pth",
 }
 
 # Paths to test data
 TEST_DATA_PATHS = {
     "image": {
         "Human Detected": "Drone-UI/test_data/image/human/",
-        "No human detected": "Drone-UI/test_data/image/no_human/"
+        "No human detected": "Drone-UI/test_data/image/no_human/",
     },
     "thermal": {
         "Human Detected": "Drone-UI/test_data/thermal/human/",
-        "No human detected": "Drone-UI/test_data/thermal/no_human/"
+        "No human detected": "Drone-UI/test_data/thermal/no_human/",
     },
     "audio": {
         "Human Detected": "Drone-UI/test_data/audio/human/",
-        "No human detected": "Drone-UI/test_data/audio/no_human/"
-    }
+        "No human detected": "Drone-UI/test_data/audio/no_human/",
+    },
 }
 
 # Lazy-loaded models
 yolo_models = {}
 audio_model = None
+
 
 # Load YOLO model dynamically
 def load_yolo_model(model_type):
@@ -51,17 +50,21 @@ def load_yolo_model(model_type):
         yolo_models[model_type] = YOLO(MODEL_PATHS[model_type])
     return yolo_models[model_type]
 
+
 # Audio classification model
 class AudioClassifier(nn.Module):
     def __init__(self):
         super(AudioClassifier, self).__init__()
         self.resnet = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
-        self.resnet.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.resnet.conv1 = nn.Conv2d(
+            1, 64, kernel_size=7, stride=2, padding=3, bias=False
+        )
         in_features = self.resnet.fc.in_features
         self.resnet.fc = nn.Linear(in_features, 2)
 
     def forward(self, x):
         return self.resnet(x)
+
 
 # Load audio model dynamically
 def load_audio_model():
@@ -72,6 +75,7 @@ def load_audio_model():
         audio_model.load_state_dict(torch.load(MODEL_PATHS["audio"]))
         audio_model.eval()
     return audio_model
+
 
 # Function to preprocess audio
 def preprocess_audio(file_path):
@@ -89,9 +93,12 @@ def preprocess_audio(file_path):
         pad = num_samples - waveform.shape[1]
         waveform = torch.nn.functional.pad(waveform, (0, pad))
 
-    mel_spec = transforms.MelSpectrogram(sample_rate=target_sample_rate, n_mels=64, n_fft=1024, hop_length=512)(waveform)
+    mel_spec = transforms.MelSpectrogram(
+        sample_rate=target_sample_rate, n_mels=64, n_fft=1024, hop_length=512
+    )(waveform)
     mel_spec = torch.log(mel_spec + 1e-9).squeeze(0)
     return mel_spec
+
 
 # Function to classify audio
 def classify_audio(file_path):
@@ -104,9 +111,10 @@ def classify_audio(file_path):
     print(f"🔊 Audio Classification Result: {class_labels[predicted_class]}")
     return class_labels[predicted_class]
 
+
 # Function to detect and plot bounding boxes for images
 def plot_bboxes(image_path, model):
-    img = cv2.imread(image_path)
+
     results = model(image_path)
     detected_img = results[0].plot()
 
@@ -116,11 +124,13 @@ def plot_bboxes(image_path, model):
 
     return encoded_img
 
+
 # Function to select a random test file
 def get_test_file(model_type, human_status):
     folder = TEST_DATA_PATHS[model_type][human_status]
     files = glob(os.path.join(folder, "*.wav" if model_type == "audio" else "*.jpg"))
     return random.choice(files) if files else None
+
 
 # WebSocket handler
 async def websocket_handler(websocket):
@@ -153,11 +163,13 @@ async def websocket_handler(websocket):
         except Exception as e:
             print(f"❗ Error: {e}")
 
+
 # Start WebSocket Server
 async def main():
     server = await websockets.serve(websocket_handler, "localhost", 8765)
     print("✅ WebSocket server started on ws://localhost:8765")
     await server.wait_closed()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -9,7 +9,10 @@ const Button = ({ children, onClick, className, variant = "primary" }) => {
   };
 
   return (
-    <button className={`${baseStyles} ${variants[variant]} ${className}`} onClick={onClick}>
+    <button
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

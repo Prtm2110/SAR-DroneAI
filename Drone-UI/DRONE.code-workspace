@@ -1,9 +1,9 @@
 {
-	"folders": [
-		{
-			"name": "DRONE",
-			"path": ".."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "name": "DRONE",
+      "path": "..",
+    },
+  ],
+  "settings": {},
 }
