@@ -18,7 +18,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-
 email_config = {
     "sender_email": "abhisheksaraff18@gmail.com",
     "sender_password": "wwtx zfew vgzq odzx",  # For Gmail, use App Password
